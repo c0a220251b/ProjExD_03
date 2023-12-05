@@ -6,8 +6,8 @@ import time
 import pygame as pg
 
 
-WIDTH = 1600  # ゲームウィンドウの幅
-HEIGHT = 900  # ゲームウィンドウの高さ
+WIDTH = 1100  # ゲームウィンドウの幅
+HEIGHT = 600  # ゲームウィンドウの高さ
 MAIN_DIR = os.path.split(os.path.abspath(__file__))[0]
 NUM_OF_BOMBS = 5 
 
@@ -143,6 +143,14 @@ class Beam:
         self.rct.move_ip(self.vx, self.vy)
         screen.blit(self.img, self.rct)
 
+class Score:
+    def __init__(self):
+        self.font = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
+        self.img = self.font.render(f"スコア:0", 0, (0, 0, 255))
+    
+    def update(self, num, screen: pg.Surface):
+        self.img = self.font.render(f"スコア：{num}", 0, (0, 0, 255))
+        screen.blit(self.img, (100, HEIGHT-50))
 
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
@@ -152,7 +160,8 @@ def main():
     bombs = [Bomb() for _ in range(NUM_OF_BOMBS)]  # BombインスタンスがNUM個並んだリスト
     beam = None
     beams = []
-    
+    score_t = 0
+    score = Score()
 
     clock = pg.time.Clock()
     tmr = 0
@@ -180,11 +189,13 @@ def main():
                     beams[j] = None
                     bombs[i] = None 
                     bird.change_img(6, screen)
+                    score_t += 1
         # Noneでない爆弾だけのリストを作る
         bombs = [bomb for bomb in bombs if bomb is not None]
         beams = [beam for beam in beams if beam is not None and beam.rct.centerx < WIDTH] 
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
+        score.update(score_t, screen)
         for bomb in bombs:
             bomb.update(screen)
         for beam in beams:
