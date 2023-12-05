@@ -192,7 +192,7 @@ def main():
                     score_t += 1
         # Noneでない爆弾だけのリストを作る
         bombs = [bomb for bomb in bombs if bomb is not None]
-        beams = [beam for beam in beams if beam is not None and beam.rct.centerx < WIDTH] 
+        beams = [beam for beam in beams if beam is not None and beam.rct.centerx < WIDTH]  # 後にfor文で使うリストbeamsの作成（画面買いを出ていたら削除）
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
         score.update(score_t, screen)
